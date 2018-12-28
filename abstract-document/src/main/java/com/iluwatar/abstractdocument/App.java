@@ -27,6 +27,7 @@ import com.iluwatar.abstractdocument.domain.HasModel;
 import com.iluwatar.abstractdocument.domain.HasParts;
 import com.iluwatar.abstractdocument.domain.HasPrice;
 import com.iluwatar.abstractdocument.domain.HasType;
+import com.iluwatar.abstractdocument.mydomain.Plane;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 抽象文档模式
  * The Abstract Document pattern enables handling additional, non-static
  * properties. This pattern uses concept of traits to enable type safety and
  * separate properties of different classes into set of interfaces.
@@ -79,13 +81,42 @@ public class App {
     car.getParts().forEach(p -> LOGGER.info("\t{}/{}/{}", p.getType().get(), p.getModel().get(), p.getPrice().get()));
   }
 
+  public void planeInfo() {
+    LOGGER.info("Constructing parts and Plane");
+
+    Map<String, Object> planeProperties = new HashMap<>();
+    planeProperties.put(HasModel.PROPERTY, "AirBus 330");
+    planeProperties.put(HasPrice.PROPERTY, 80000000L);
+
+    Map<String, Object> wheelProperties = new HashMap<>();
+    wheelProperties.put(HasType.PROPERTY, "wheel");
+    wheelProperties.put(HasPrice.PROPERTY, 500L);
+
+    Map<String, Object> doorProperties = new HashMap<>();
+    doorProperties.put(HasType.PROPERTY, "swing");
+    doorProperties.put(HasPrice.PROPERTY, 900L);
+
+    planeProperties.put(HasParts.PROPERTY, Arrays.asList(wheelProperties, doorProperties));
+
+    Plane plane = new Plane(planeProperties);
+
+    LOGGER.info("Here is our Plane:");
+    LOGGER.info("-> model: {}", plane.getModel().get());
+    LOGGER.info("-> price: {}", plane.getPrice().get());
+    LOGGER.info("-> parts: ");
+    plane.getParts().forEach(p -> LOGGER.info("\t{}/{}", p.getType().get(), p.getPrice().get()));
+  }
+
   /**
    * Program entry point
    *
    * @param args command line args
    */
   public static void main(String[] args) {
-    new App();
+    App app = new App();
+    System.out.println("-----------");
+    app.planeInfo();
+
   }
 
 }
